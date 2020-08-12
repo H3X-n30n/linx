@@ -1,0 +1,107 @@
+#!/bin/bash
+
+########################
+#### Author: N30N ######
+## Program: Androlinx ##
+########################
+
+# Colors FGBG
+R=`echo "\033[31m"` RE=`echo "\033[41m"`
+G=`echo "\033[32m"`
+Y=`echo "\033[33m"`
+B=`echo "\033[34m"`
+r=`echo "\033[0m"`
+
+tput reset
+
+## Directories
+PREFIX='/data/data/com.termux/files/usr'
+TERMUX_DIR="$HOME/.termux"
+DIR="$(pwd)"
+
+echo -e " ${Y}  ┌─────────────────────┐"
+echo -e " ${Y}  │ ${GR}ANDROLINX INSTALLER${r}${Y} │"
+echo -e " ${Y}  └─────────────────────┘${r}"
+sleep 2
+menu_opt(){ printf "     Author: N30N"
+    printf "\n${G}    -----------------"
+	printf "\n${r}      1)${G} Install"
+	printf "\n${r}      2)${G} About"
+	printf "\n${r}      X)${R} Exit"
+	printf "\n${G}    -----------------"
+	printf "\nChoose an option: "
+	read opt
+}
+
+option_picked(){
+    msgcolor=`echo "\033[01;31m"`
+    normal=`echo "\033[00;00m"`
+    message=${@:-"${normal}Error: No message passed"}
+    printf "${msgcolor}${message}${normal}\n"
+}
+
+menu_opt
+while [ '$opt' != '' ]
+    do
+    if [ $opt = '' ]; then
+      exit;
+    else
+      case $opt in
+        1) clear;
+            option_picked "Installing..."; 
+			sleep 2
+			clear
+	            echo -e " ${R}  Checking dependencies..."
+				sleep 2
+				clear
+	            if [[ (-f $PREFIX/bin/wget) && (-f $PREFIX/bin/tput) ]]; then
+		              echo -e "  ${G}[✓] Dependencies are already Installed!"
+	            else
+	          	{ pkg update -y; pkg install -y wget ncurses-utils; }
+		        (type -p wget tput &> /dev/null) && { echo; echo " Dependencies are succesfully installed!"; } || { echo; echo "    ${BLUE}[${RED}!${BLUE}] ${RED}Error Occured, failed to install dependencies."; echo; reset_color; exit 1; }
+	            fi
+				echo -e "    ${B} Installing LinX..."
+	            # Delete old files
+	            if [[ (-L $PREFIX/bin/linx) && (-d $PREFIX/share/linx) ]]; then
+	            	echo "${R}Deleting files from previous installation..."
+		           { rm -r $PREFIX/bin/linx $PREFIX/share/linx; echo; }
+	            fi
+	            # termux config dir
+             	if [[ ! -d $TERMUX_DIR ]]; then
+            		mkdir $TERMUX_DIR
+	            else
+	            	cp -r $TERMUX_DIR{,.backup}
+	            fi
+	           # Coping files
+	            { echo -e "    ${R} Coping files in $PREFIX/share ${ORANGE}directory..."${BLUE}; }
+	            { mkdir $PREFIX/share/linx; cp -r $DIR/core $PREFIX/share/linx; cp -r $DIR/linx $PREFIX/share/linx; }
+	            { chmod +x $PREFIX/share/linx/linx; ln -s $PREFIX/share/linx/linx $PREFIX/bin/linx; }
+
+	           # Verify files 
+	           if [[ (-L $PREFIX/bin/linx) && (-d $PREFIX/share/linx) ]]; then
+	              echo -e "${G}Successfully Installed."
+		          echo -e "${G}Now You Can Run This Program By Just typing ${C}linx${r}."
+		          { ${r}; exit 0; }
+	          else
+		          echo " ${R}Error Occured.${r}" 
+	          fi
+			  break
+			 ;;
+        2) clear;
+            option_picked "Option 3 Picked";
+            printf "sudo service apache2 restart";
+            menu_opt;
+        ;;
+        x) exit;
+        ;;
+        \n)exit;
+        ;;
+        *)clear;
+            option_picked "Pick an option from the menu";
+			sleep 2
+			clear
+            menu_opt;
+        ;;
+      esac
+    fi
+done

@@ -1,0 +1,158 @@
+#!/data/data/com.termux/files/usr/bin/bash
+
+# Colors FGBG
+R=`echo "\033[31m"` RE=`echo "\033[41m"`
+G=`echo "\033[32m"` GR=`echo "\033[42m"`
+Y=`echo "\033[33m"` YE=`echo "\033[43m"`
+B=`echo "\033[34m"`
+C=`echo "\033[36m"`
+c=`echo "\033[96m"`
+r=`echo "\033[0m"`
+
+tput reset
+
+## Directories
+PREFIX='/data/data/com.termux/files/usr'
+TERMUX_DIR="$HOME/.termux"
+CORE_DIR="$PREFIX/share/linx/core"
+
+linx_main(){
+    printf "\n${G} ╭──────────────────────────────╮"
+	printf "\n${G} │${C} ██${c}╗${C}     ██${c}╗${C}███${c}╗${C}  ██${c}╗${C}██${c}╗${C}  ██${c}╗${G} │"
+    printf "\n${G} │${C} ██${c}║${C}     ██${c}║${C}████${c}╗${C} ██${c}║${c}╚${C}██${c}╗${C}██${c}╔╝${G} │"
+	printf "\n${G} │${C} ██${c}║${C}     ██${c}║${C}██${c}╔${C}██${c}╗${C}██${c}║ ╚${C}███${c}╔╝${G}  │"
+	printf "\n${G} │${C} ██${c}║${C}     ██${c}║${C}██${c}║╚${C}████${c}║${C} ██${c}╔${C}██${c}╗${G}  │"
+    printf "\n${G} │${C} ███████${c}╗${C}██${c}║${C}██${c}║ ╚${C}███${c}║${C}██${c}╔╝╚${C}██${c}╗${G} │"
+    printf "\n${G} │${c} ╚══════╝╚═╝╚═╝  ╚══╝╚═╝  ╚═╝${G} │"
+	printf "\n${G} ╰──────────────────────────────╯"
+	printf "\n${R}       Author:N30N"
+	printf "\n${G} ┌───────────────┬───────────────┐"
+	printf "\n${G} │${B} [1]${C} Arch     ${G} │${B} [4]${C} Kali${G}      │"
+    printf "\n${G} ├───────────────┼───────────────┤"
+	printf "\n${G} │${B} [2]${C} Debian   ${G} │${B} [5]${C} Manjaro${G}   │"
+    printf "\n${G} ├───────────────┼───────────────┤"
+	printf "\n${G} │${B} [3]${C} Fedora   ${G} │${B} [6]${C} Ubuntu${G}    │"
+    printf "\n${G} ├───────────────┴───────────────┤"
+	printf "\n${G} │${B} [U]${Y} Update     ${B} [X]${Y} Uninstall${G} │"
+    printf "\n${G} ╰─────────╮          ╭──────────╯"
+	printf "\n${G}           │ ${B}[Q]${R} Quit ${G}│"
+    printf "\n${G}           ╰────┬─────╯"
+	printf "\n${G} ╭──────────────╯"
+	printf "\n${G} ╰─┤${B}Choose an option:${B} "
+	read opt
+}
+
+## Script Termination
+exit_on_signal_SIGINT () {
+    { printf "\n\n%s\n" "    ${B}[${R}!${B}] ${R}Script interrupted." 2>&1; echo; reset_color; }
+    exit 0
+}
+
+exit_on_signal_SIGTERM () {
+    { printf "\n\n%s\n" "    ${B}[${R}!${B}] ${R}Script terminated." 2>&1; echo; reset_color; }
+    exit 0
+}
+
+trap exit_on_signal_SIGINT SIGINT
+trap exit_on_signal_SIGTERM SIGTERM
+
+## Reset terminal colors
+reset_color() {
+	tput sgr0   # reset attributes
+	tput op     # reset color
+    return
+}
+
+option_picked(){
+    msgcolor=`echo "\033[01;31m"`
+    normal=`echo "\033[00;00m"`
+    message=${@:-"${normal}Error: No message passed"}
+    printf "${msgcolor}${message}${normal}\n"
+}
+
+linx_main
+
+while [ '$opt' != '' ]
+    do
+    if [ '$opt' = '' ]; then
+       linx_main;
+    else
+      case $opt in
+        1) clear;
+            option_picked "      ARCH LINUX";
+			sleep 2
+		    DIR="${BASH_SOURCE%/*}"
+                if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+                . "$DIR/core/desktop.sh"
+			linx_main;
+			 ;;
+	    2) clear;
+            option_picked "      DEBIAN";
+			sleep 2
+			DIR="${BASH_SOURCE%/*}"
+                if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+                . "$DIR/core/desktop.sh"
+			linx_main;
+			 ;;
+		3) clear;
+            option_picked "      FEDARO";
+			sleep 2
+		    DIR="${BASH_SOURCE%/*}"
+                if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+                . "$DIR/core/desktop.sh"
+			linx_main;
+			 ;;
+		4) clear;
+            option_picked "      KALI LINUX";
+			sleep 2
+			DIR="${BASH_SOURCE%/*}"
+                if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+                . "$DIR/core/desktop.sh"
+			linx_main;
+			 ;;
+	    5) clear;
+            option_picked "      MANJARO";
+			sleep 2
+			DIR="${BASH_SOURCE%/*}"
+                if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+                . "$DIR/core/desktop.sh"
+			linx_main;
+			exit
+			 ;;
+		6) clear;
+            option_picked "      UBUNTU";
+			sleep 2
+		    DIR="${BASH_SOURCE%/*}"
+                if [[ ! -d "$DIR" ]]; then DIR="$PWD"; fi
+                . "$DIR/core/desktop.sh"
+			linx_main;
+			 ;;
+		u) clear;
+            option_picked "Updating...";
+			sleep 2
+			clear
+			printf "Installed!\n";
+			sleep 2
+			exit
+			 ;;
+		x) clear;
+            option_picked "      UNINSTALLATION";
+			sleep 2
+			clear
+			printf "Installed!\n";
+			sleep 2
+			exit
+        ;;
+        q) exit;
+        ;;
+        \n) linx_main;
+        ;;
+        *) clear;
+            option_picked "Undefinded option: ${Y}$opt";
+			sleep 2
+			clear
+            linx_main;
+        ;;
+      esac
+    fi
+done
